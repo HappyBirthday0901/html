@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>生日快乐 ！</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: #d3dae8;
+            font-family: 'Arial', sans-serif;
+            overflow: hidden;
+        }
+        canvas {
+            border: 2px solid #000;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+            border-radius: 15px;
+            position: relative;
+            z-index: 3;
+        }
+        .background-img {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 1;
+            object-fit: cover;
+            opacity: 0.5;
+        }
+        .overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(255, 255, 255, 0.4);
+            z-index: 2;
+            pointer-events: none;
+        }
+    </style>
+</head>
+<body>
+    <!-- Background Image -->
+    <img src="https://pic.616pic.com/bg_w1180/00/01/52/tOu9suBYfG.jpg" class="background-img" alt="Background Image">
+
+    <!-- Overlay for better text visibility -->
+    <div class="overlay"></div>
+
+    <!-- Canvas for drawings -->
+    <canvas id="birthdayCanvas" width="900" height="600"></canvas>
+    
+    <script>
+        const canvas = document.getElementById('birthdayCanvas');
+        const ctx = canvas.getContext('2d');
+
+        // Draw a filled circle with a specified center, radius, and color
+        function drawCircle(x, y, radius, color) {
+            ctx.beginPath();
+            ctx.arc(x, y, radius, 0, 2 * Math.PI);
+            ctx.fillStyle = color;
+            ctx.fill();
+        }
+
+        // Draw a gradient background
+        function drawBackground() {
+            const gradient = ctx.createLinearGradient(0, 0, canvas.width, canvas.height);
+            gradient.addColorStop(0, '#f0f8ff');
+            gradient.addColorStop(1, '#b0e0e6');
+            ctx.fillStyle = gradient;
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+        }
+
+        // Draw the image on canvas
+        function drawImage() {
+            const img = new Image();
+            img.src = 'https://pic.616pic.com/bg_w1180/00/01/52/tOu9suBYfG.jpg';
+            img.onload = () => {
+                ctx.drawImage(img, 0, 0, canvas.width, canvas.height); // Draw image to fill canvas
+                drawShapes(); // Draw shapes on top of image
+                displayMessages(); // Draw messages on top of shapes
+            };
+        }
+
+        // Draw birthday shapes
+        function drawShapes() {
+            drawBackground();
+            drawCircle(450, 300, 150, '#fef5f7'); // Large circle
+            drawCircle(450, 300, 100, '#f2d7dd'); // Smaller circle
+            drawRandomDots();
+        }
+
+        // Draw random dots with different colors and sizes
+        function drawRandomDots() {
+            const colors = ["#e28cb9", "#805a8c", "#eaa989", "#6e90b7", "#b8b68f", "#e174b5", "#cf737c", "#7c8782"];
+            for (let i = 0; i < 80; i++) {
+                const x = Math.random() * canvas.width;
+                const y = Math.random() * canvas.height;
+                const color = colors[Math.floor(Math.random() * colors.length)];
+                const size = Math.random() * 5 + 2;
+                drawCircle(x, y, size, color);
+            }
+        }
+
+        // Display birthday messages with timed transitions
+        function displayMessages() {
+            ctx.textAlign = 'center';
+            ctx.textBaseline = 'middle';
+
+            // Initial message
+            drawTextWithEffects('生 日 快 乐 ! 🎂🎂🎂', canvas.width / 2, canvas.height / 2, 50, '#fff', '#000', 2);
+
+            setTimeout(() => {
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+                drawShapes();
+                drawTextWithEffects('祝 ：玟暶', canvas.width / 2, canvas.height / 2, 30, 'cornflowerblue', 'darkblue', 1);
+
+                setTimeout(() => {
+                    ctx.clearRect(0, 0, canvas.width, canvas.height);
+                    drawShapes();
+                    drawTextWithEffects('前 程 似 锦 ！\n 美 梦 成 真 ！\n 学 业 有 成 ！\n 天 天 开 心 !', canvas.width / 2, canvas.height / 2, 30, 'lightcoral', 'darkred', 1);
+
+                    setTimeout(() => {
+                        ctx.clearRect(0, 0, canvas.width, canvas.height);
+                        drawShapes();
+                        drawTextWithEffects('愿你的生活每一刻都充满幸福🥳🎉', canvas.width / 2, canvas.height - 100, 30, 'cornflowerblue', 'darkblue', 1);
+                    }, 5000);
+                }, 5000);
+            }, 3000);
+        }
+
+        // Draw text with effects
+        function drawTextWithEffects(text, x, y, fontSize, fillColor, strokeColor, lineWidth) {
+            ctx.font = `${fontSize}px Arial`; // Corrected syntax
+            ctx.textAlign = 'center';
+            ctx.textBaseline = 'middle';
+            ctx.lineWidth = lineWidth;
+
+            // Create text shadow effect
+            ctx.shadowColor = 'rgba(0, 0, 0, 0.6)';
+            ctx.shadowBlur = 5;
+            ctx.shadowOffsetX = 3;
+            ctx.shadowOffsetY = 3;
+
+            // Draw text stroke and fill
+            ctx.strokeStyle = strokeColor;
+            ctx.fillStyle = fillColor;
+            ctx.strokeText(text, x, y);
+            ctx.fillText(text, x, y);
+
+            // Reset shadow
+            ctx.shadowColor = 'transparent';
+        }
+
+        // Initialize drawing
+        drawImage();
+    </script>
+</body>
+</html>
+
